@@ -2,66 +2,70 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Band 9 Professional Drill</title>
+    <title>Global Consultant: Professional Simulation</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 20px; display: flex; justify-content: center; }
-        .drill-box { background: white; width: 100%; max-width: 600px; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        #timer { font-size: 2em; color: #c0392b; font-weight: bold; text-align: center; }
-        .script-area { background: #f8f9fa; padding: 20px; border-left: 5px solid #2c3e50; margin: 20px 0; min-height: 100px; }
-        .controls { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
-        button { padding: 15px 25px; cursor: pointer; border: none; border-radius: 5px; font-weight: bold; }
-        .rec-btn { background: #27ae60; color: white; }
-        .stop-btn { background: #c0392b; color: white; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; }
+        .app-container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .input-group { margin: 15px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; }
+        input, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; }
+        .controls { display: flex; gap: 10px; margin-top: 20px; }
+        button { padding: 10px 20px; cursor: pointer; background: #2c3e50; color: white; border: none; }
+        #preview { margin-top: 20px; padding: 15px; background: #e8f6f3; border: 1px solid #27ae60; display: none; }
     </style>
 </head>
 <body>
 
-<div class="drill-box">
-    <h2 id="topic">Drill: Sponsorship Expectation</h2>
-    <div id="timer">02:00</div>
-    
-    <div class="script-area" id="script-display">
-        "When I evaluate the prospect of sponsorship, I view it through the lens of a strategic alliance rather than a simple employment opportunity..."
+<div class="app-container">
+    <h2>IELTS Mock: Professional Sponsorship</h2>
+    <p><strong>Test Item:</strong> "Describe how your professional background prepares you for international sponsorship."</p>
+
+    <div class="input-group">
+        <label>1. Situation (Set the context with nominalization):</label>
+        <input type="text" id="situation" placeholder="e.g., The ____________ of my professional career lies at the nexus of...">
+    </div>
+
+    <div class="input-group">
+        <label>2. Task (Define objective using complex conjunction):</label>
+        <input type="text" id="task" placeholder="e.g., ____________ I am aiming to transition, I must first...">
+    </div>
+
+    <div class="input-group">
+        <label>3. Action (Use Inversion for emphasis):</label>
+        <textarea id="action" placeholder="e.g., Not only have I ____________, but I also ____________."></textarea>
+    </div>
+
+    <div class="input-group">
+        <label>4. Result & Reflection (Academic Register/Hedging):</label>
+        <textarea id="result" placeholder="e.g., It would be more ____________ to suggest that this results in..."></textarea>
     </div>
 
     <div class="controls">
-        <button class="rec-btn" onclick="startDrill()">Start Drill & Record</button>
-        <button class="stop-btn" onclick="stopDrill()">Stop & Save</button>
+        <button onclick="previewResult()">Preview Result</button>
+        <button onclick="calculateScore()">Submit & Score</button>
+        <button onclick="nextLevel()">Next Competency Level</button>
     </div>
-    
-    <audio id="playback" controls style="width: 100%; margin-top: 20px;"></audio>
+
+    <div id="preview"></div>
 </div>
 
 <script>
-    let mediaRecorder;
-    let audioChunks = [];
-    let timeLeft = 120;
-
-    function startDrill() {
-        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-            mediaRecorder = new MediaRecorder(stream);
-            mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
-            mediaRecorder.onstop = () => {
-                const audioBlob = new Blob(audioChunks);
-                document.getElementById('playback').src = URL.createObjectURL(audioBlob);
-            };
-            mediaRecorder.start();
-            startTimer();
-        });
+    function previewResult() {
+        const s = document.getElementById('situation').value;
+        const t = document.getElementById('task').value;
+        const a = document.getElementById('action').value;
+        const r = document.getElementById('result').value;
+        document.getElementById('preview').style.display = 'block';
+        document.getElementById('preview').innerHTML = `<strong>Constructed Response:</strong><br>${s} ${t} ${a} ${r}`;
     }
 
-    function startTimer() {
-        const interval = setInterval(() => {
-            timeLeft--;
-            document.getElementById('timer').innerText = `00:${timeLeft < 10 ? '0'+timeLeft : timeLeft}`;
-            if(timeLeft <= 0) clearInterval(interval);
-        }, 1000);
+    function calculateScore() {
+        const inputs = [document.getElementById('situation').value, document.getElementById('task').value, document.getElementById('action').value, document.getElementById('result').value];
+        const filled = inputs.filter(i => i.length > 20).length;
+        const score = filled * 2 + 1; // Basic logic: 1-9 scale
+        alert("Your Estimated Band Score: " + score + "/9. Practice more academic collocations to reach Band 9.");
     }
 
-    function stopDrill() {
-        mediaRecorder.stop();
-        alert("Recording saved. Proceed to self-scoring.");
-    }
+    function nextLevel() { alert("Advancing to Analytical Decision-Making Framework Level."); }
 </script>
 </body>
 </html>
