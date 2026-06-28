@@ -2,62 +2,58 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Global Consultant: Professional Drill</title>
+    <title>Professional Proficiency Drill: Global Consultant</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 20px; background: #f9f9f9; }
-        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .section { margin-bottom: 25px; padding: 15px; border-radius: 8px; background: #f0f4f8; }
-        button { background: #2c3e50; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; }
-        textarea { width: 100%; height: 100px; margin-top: 10px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; }
+        .app-container { max-width: 700px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .controls { display: flex; gap: 10px; margin-top: 15px; }
+        .layer-box { background: #eef2f7; padding: 15px; border-left: 5px solid #2c3e50; margin: 10px 0; }
+        button { background: #2c3e50; color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; }
+        #status { font-weight: bold; color: #34495e; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h1>Professional Proficiency Drill</h1>
-    <label>Select Your Drill Topic:</label>
-    <select id="topicSelect" onchange="loadTopic()">
-        <option value="sponsorship">Sponsorship Expectation</option>
-        <option value="tripleWin">The Triple-Win Framework</option>
-        <option value="pipeline">Building the Pipeline</option>
-    </select>
-
-    <div class="section">
-        <h3>1. Listen to Model Answer</h3>
-        <p id="model-text">...</p>
-        <button onclick="speak()">Play Professional Audio</button>
+<div class="app-container">
+    <h2 id="topic-title">Drill: Sponsorship Expectation</h2>
+    
+    <div class="layer-box">
+        <p id="layer-prompt"><strong>Layer 1 (Direct Answer):</strong> State your strategic objective clearly. Listen to the model, then record your attempt.</p>
+        <button onclick="playModel()">Listen to Model</button>
+        <button onclick="toggleRecord()">Start/Stop Recording</button>
     </div>
 
-    <div class="section">
-        <h3>2. Record & Reflect</h3>
-        <textarea placeholder="Record your attempt here..."></textarea>
-        <p><em>Checklist for Band 9:</em></p>
-        <input type="checkbox"> Used Academic Hedging? <br>
-        <input type="checkbox"> Used STAR structure invisibly? <br>
-        <input type="checkbox"> Included "Triple-Win" narrative?
+    <div id="status">Status: Ready to drill</div>
+
+    <div class="controls">
+        <button onclick="prevTopic()">Previous</button>
+        <button onclick="nextTopic()">Next Layer/Topic</button>
     </div>
 </div>
 
 <script>
-    const data = {
-        sponsorship: { text: "When I evaluate the prospect of sponsorship, I view it through the lens of a strategic alliance rather than a simple employment opportunity. My primary objective is to find an institution where my multifaceted background can be fully integrated to enhance the standard of care." },
-        tripleWin: { text: "My professional trajectory represents a mutually beneficial exchange. I am aiming to create a sustainable pipeline that addresses professional needs across all three spheres: my own career, the Australian healthcare sector, and the broader Indonesian professional framework." },
-        pipeline: { text: "I am positioning myself as a conduit for clinical and operational improvement. It would be more accurate to suggest that my goal is not just seeking a position, but building a pipeline for clinical excellence by integrating diverse experiences." }
-    };
+    const drills = [
+        { title: "Sponsorship Expectation", text: "When I evaluate the prospect of sponsorship, I view it through the lens of a strategic alliance rather than a simple employment opportunity." },
+        { title: "The Triple-Win Framework", text: "My professional trajectory represents a mutually beneficial exchange between my career, the Australian sector, and Indonesia." }
+    ];
+    let current = 0;
 
-    function loadTopic() {
-        const t = document.getElementById('topicSelect').value;
-        document.getElementById('model-text').innerText = data[t].text;
-    }
-    
-    function speak() {
-        const text = document.getElementById('model-text').innerText;
-        const u = new SpeechSynthesisUtterance(text);
-        u.rate = 0.9;
+    function playModel() {
+        const u = new SpeechSynthesisUtterance(drills[current].text);
         window.speechSynthesis.speak(u);
+        document.getElementById('status').innerText = "Status: Playing model answer...";
     }
-    loadTopic();
-</script>
 
+    function toggleRecord() {
+        document.getElementById('status').innerText = "Status: Recording your attempt (simulate with your voice)...";
+        // Note: In a production environment, this integrates with the Web MediaRecorder API.
+    }
+
+    function nextTopic() {
+        current = (current + 1) % drills.length;
+        document.getElementById('topic-title').innerText = "Drill: " + drills[current].title;
+        document.getElementById('status').innerText = "Status: New topic loaded.";
+    }
+</script>
 </body>
 </html>
