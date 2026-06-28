@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Band 9 Speaking Drill App</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 20px; background-color: #f4f7f6; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; }
+        button { background: #3498db; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+        #answer-area { margin-top: 20px; padding: 15px; border-left: 5px solid #3498db; background: #ecf0f1; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>Global Consultant IELTS Drill</h1>
+    <p>Select a topic to practice your Band 9 STAR-infused responses.</p>
+    
+    <select id="topicSelect" onchange="updateContent()">
+        <option value="sponsorship">Sponsorship Expectation</option>
+        <option value="career">Building a Pipeline</option>
+    </select>
+
+    <div id="answer-area">
+        <h3 id="question-title">Sponsorship Expectation</h3>
+        <p id="model-answer">"When I evaluate the prospect of sponsorship, I view it through the lens of a strategic alliance rather than a simple employment opportunity. My primary objective is to find an institution where my multifaceted background can be fully integrated..."</p>
+        <button onclick="speakAnswer()">Listen to Model Answer</button>
+    </div>
+</div>
+
+<script>
+    const content = {
+        sponsorship: {
+            title: "Sponsorship Expectation",
+            text: "When I evaluate the prospect of sponsorship, I view it through the lens of a strategic alliance rather than a simple employment opportunity. My primary objective is to find an institution where my multifaceted background can be fully integrated to enhance the standard of care."
+        },
+        career: {
+            title: "Building a Pipeline",
+            text: "My goal is to position myself as a conduit for clinical and operational improvement. I am not simply seeking a position; I am looking to build a pipeline for clinical excellence by integrating my diverse experiences."
+        }
+    };
+
+    function updateContent() {
+        const topic = document.getElementById('topicSelect').value;
+        document.getElementById('question-title').innerText = content[topic].title;
+        document.getElementById('model-answer').innerText = content[topic].text;
+    }
+
+    function speakAnswer() {
+        const text = document.getElementById('model-answer').innerText;
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 0.9; // Professional pace
+        window.speechSynthesis.speak(utterance);
+    }
+</script>
+
+</body>
+</html>
