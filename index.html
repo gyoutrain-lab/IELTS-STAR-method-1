@@ -2,70 +2,76 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Global Consultant: Professional Simulation</title>
+    <title>Global Consultant: Band 9 Competency Drill</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; }
         .app-container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .input-group { margin: 15px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; }
-        input, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; }
+        .input-group { margin: 15px 0; padding: 15px; background: #f8f9fa; border-left: 5px solid #2c3e50; }
+        .prologue { font-size: 0.85em; color: #34495e; font-weight: bold; margin-bottom: 5px; }
+        textarea { width: 100%; height: 50px; }
         .controls { display: flex; gap: 10px; margin-top: 20px; }
         button { padding: 10px 20px; cursor: pointer; background: #2c3e50; color: white; border: none; }
-        #preview { margin-top: 20px; padding: 15px; background: #e8f6f3; border: 1px solid #27ae60; display: none; }
+        #preview { margin-top: 20px; padding: 15px; border: 1px solid #ddd; display: none; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <h2>IELTS Mock: Professional Sponsorship</h2>
-    <p><strong>Test Item:</strong> "Describe how your professional background prepares you for international sponsorship."</p>
-
+    <h2 id="level-title">Level 1: Professional Sponsorship</h2>
+    
     <div class="input-group">
-        <label>1. Situation (Set the context with nominalization):</label>
-        <input type="text" id="situation" placeholder="e.g., The ____________ of my professional career lies at the nexus of...">
+        <div class="prologue" id="pro-sit">Scene: (Nominalization)</div>
+        <textarea id="sit" placeholder="The ____________ of ____________ indicates a paradigm shift in ____________."></textarea>
     </div>
-
     <div class="input-group">
-        <label>2. Task (Define objective using complex conjunction):</label>
-        <input type="text" id="task" placeholder="e.g., ____________ I am aiming to transition, I must first...">
+        <div class="prologue" id="pro-task">Challenge: (Complex Conjunction)</div>
+        <textarea id="task" placeholder="____________ the complexity of the situation, I was tasked with ____________."></textarea>
     </div>
-
     <div class="input-group">
-        <label>3. Action (Use Inversion for emphasis):</label>
-        <textarea id="action" placeholder="e.g., Not only have I ____________, but I also ____________."></textarea>
+        <div class="prologue" id="pro-act">Action: (Past Progressive + Inversion)</div>
+        <textarea id="act" placeholder="While I was ____________, never had I ____________."></textarea>
     </div>
-
     <div class="input-group">
-        <label>4. Result & Reflection (Academic Register/Hedging):</label>
-        <textarea id="result" placeholder="e.g., It would be more ____________ to suggest that this results in..."></textarea>
+        <div class="prologue" id="pro-res">Impact: (Academic Hedging)</div>
+        <textarea id="res" placeholder="It would be more ____________ to conclude that this fosters ____________."></textarea>
     </div>
 
     <div class="controls">
-        <button onclick="previewResult()">Preview Result</button>
-        <button onclick="calculateScore()">Submit & Score</button>
-        <button onclick="nextLevel()">Next Competency Level</button>
+        <button onclick="preview()">Preview</button>
+        <button onclick="nextLevel()">Next Competency</button>
     </div>
-
     <div id="preview"></div>
 </div>
 
 <script>
-    function previewResult() {
-        const s = document.getElementById('situation').value;
-        const t = document.getElementById('task').value;
-        const a = document.getElementById('action').value;
-        const r = document.getElementById('result').value;
+    const levels = [
+        { title: "Level 1: Professional Sponsorship", sit: "The formalization of international standards indicates a paradigm shift in nursing mobility.", task: "Given the complexity of the situation, I was tasked with aligning local practices.", act: "While I was preparing for licensure, never had I encountered such rigorous protocols.", res: "It would be more accurate to conclude that this fosters global professional synergy." },
+        { title: "Level 2: NPSG Compliance", sit: "The prioritization of safety protocols indicates a paradigm shift in institutional accountability.", task: "Considering the complexity of the situation, I was tasked with mitigating clinical errors.", act: "While I was auditing ward safety, never had I observed such systemic vigilance.", res: "It would be more reasonable to conclude that this fosters long-term patient security." },
+        { title: "Level 3: Global Labor Transfer", sit: "The acceleration of cross-border migration indicates a paradigm shift in human resource distribution.", task: "Notwithstanding the complexity of the situation, I was tasked with credential verification.", act: "While I was analyzing labor trends, never had I anticipated such rapid demographic changes.", res: "It would be more prudent to conclude that this fosters sustainable healthcare economies." },
+        { title: "Level 4: Professional Ethics", sit: "The intensification of bioethical scrutiny indicates a paradigm shift in clinical decision-making.", task: "Reflecting on the complexity of the situation, I was tasked with resolving interpersonal conflicts.", act: "While I was navigating the crisis, never had I felt more committed to ethical transparency.", res: "It would be more appropriate to conclude that this fosters trust within the clinical unit." },
+        { title: "Level 5: Crisis Management", sit: "The rapid evolution of emergency response indicates a paradigm shift in triage management.", task: "Despite the complexity of the situation, I was tasked with maintaining patient flow.", act: "While I was coordinating the unit, never had I utilized such efficient resource allocation.", res: "It would be more analytical to conclude that this fosters resilience in high-pressure environments." }
+    ];
+    let current = 0;
+
+    function nextLevel() {
+        current = (current + 1) % levels.length;
+        document.getElementById('level-title').innerText = levels[current].title;
+        document.getElementById('sit').placeholder = levels[current].sit;
+        document.getElementById('task').placeholder = levels[current].task;
+        document.getElementById('act').placeholder = levels[current].act;
+        document.getElementById('res').placeholder = levels[current].res;
+        document.querySelectorAll('textarea').forEach(t => t.value = '');
+        document.getElementById('preview').style.display = 'none';
+    }
+
+    function preview() {
         document.getElementById('preview').style.display = 'block';
-        document.getElementById('preview').innerHTML = `<strong>Constructed Response:</strong><br>${s} ${t} ${a} ${r}`;
+        document.getElementById('preview').innerHTML = 
+            `<strong>Scene:</strong> ${document.getElementById('sit').value || document.getElementById('sit').placeholder}<br>` +
+            `<strong>Challenge:</strong> ${document.getElementById('task').value || document.getElementById('task').placeholder}<br>` +
+            `<strong>Action:</strong> ${document.getElementById('act').value || document.getElementById('act').placeholder}<br>` +
+            `<strong>Impact:</strong> ${document.getElementById('res').value || document.getElementById('res').placeholder}`;
     }
-
-    function calculateScore() {
-        const inputs = [document.getElementById('situation').value, document.getElementById('task').value, document.getElementById('action').value, document.getElementById('result').value];
-        const filled = inputs.filter(i => i.length > 20).length;
-        const score = filled * 2 + 1; // Basic logic: 1-9 scale
-        alert("Your Estimated Band Score: " + score + "/9. Practice more academic collocations to reach Band 9.");
-    }
-
-    function nextLevel() { alert("Advancing to Analytical Decision-Making Framework Level."); }
 </script>
 </body>
 </html>
