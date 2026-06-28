@@ -2,58 +2,61 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Band 9 Speaking Drill App</title>
+    <title>Global Consultant: Professional Drill</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 20px; background-color: #f4f7f6; }
-        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        h1 { color: #2c3e50; }
-        button { background: #3498db; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
-        #answer-area { margin-top: 20px; padding: 15px; border-left: 5px solid #3498db; background: #ecf0f1; }
+        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 20px; background: #f9f9f9; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .section { margin-bottom: 25px; padding: 15px; border-radius: 8px; background: #f0f4f8; }
+        button { background: #2c3e50; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; }
+        textarea { width: 100%; height: 100px; margin-top: 10px; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h1>Global Consultant IELTS Drill</h1>
-    <p>Select a topic to practice your Band 9 STAR-infused responses.</p>
-    
-    <select id="topicSelect" onchange="updateContent()">
+    <h1>Professional Proficiency Drill</h1>
+    <label>Select Your Drill Topic:</label>
+    <select id="topicSelect" onchange="loadTopic()">
         <option value="sponsorship">Sponsorship Expectation</option>
-        <option value="career">Building a Pipeline</option>
+        <option value="tripleWin">The Triple-Win Framework</option>
+        <option value="pipeline">Building the Pipeline</option>
     </select>
 
-    <div id="answer-area">
-        <h3 id="question-title">Sponsorship Expectation</h3>
-        <p id="model-answer">"When I evaluate the prospect of sponsorship, I view it through the lens of a strategic alliance rather than a simple employment opportunity. My primary objective is to find an institution where my multifaceted background can be fully integrated..."</p>
-        <button onclick="speakAnswer()">Listen to Model Answer</button>
+    <div class="section">
+        <h3>1. Listen to Model Answer</h3>
+        <p id="model-text">...</p>
+        <button onclick="speak()">Play Professional Audio</button>
+    </div>
+
+    <div class="section">
+        <h3>2. Record & Reflect</h3>
+        <textarea placeholder="Record your attempt here..."></textarea>
+        <p><em>Checklist for Band 9:</em></p>
+        <input type="checkbox"> Used Academic Hedging? <br>
+        <input type="checkbox"> Used STAR structure invisibly? <br>
+        <input type="checkbox"> Included "Triple-Win" narrative?
     </div>
 </div>
 
 <script>
-    const content = {
-        sponsorship: {
-            title: "Sponsorship Expectation",
-            text: "When I evaluate the prospect of sponsorship, I view it through the lens of a strategic alliance rather than a simple employment opportunity. My primary objective is to find an institution where my multifaceted background can be fully integrated to enhance the standard of care."
-        },
-        career: {
-            title: "Building a Pipeline",
-            text: "My goal is to position myself as a conduit for clinical and operational improvement. I am not simply seeking a position; I am looking to build a pipeline for clinical excellence by integrating my diverse experiences."
-        }
+    const data = {
+        sponsorship: { text: "When I evaluate the prospect of sponsorship, I view it through the lens of a strategic alliance rather than a simple employment opportunity. My primary objective is to find an institution where my multifaceted background can be fully integrated to enhance the standard of care." },
+        tripleWin: { text: "My professional trajectory represents a mutually beneficial exchange. I am aiming to create a sustainable pipeline that addresses professional needs across all three spheres: my own career, the Australian healthcare sector, and the broader Indonesian professional framework." },
+        pipeline: { text: "I am positioning myself as a conduit for clinical and operational improvement. It would be more accurate to suggest that my goal is not just seeking a position, but building a pipeline for clinical excellence by integrating diverse experiences." }
     };
 
-    function updateContent() {
-        const topic = document.getElementById('topicSelect').value;
-        document.getElementById('question-title').innerText = content[topic].title;
-        document.getElementById('model-answer').innerText = content[topic].text;
+    function loadTopic() {
+        const t = document.getElementById('topicSelect').value;
+        document.getElementById('model-text').innerText = data[t].text;
     }
-
-    function speakAnswer() {
-        const text = document.getElementById('model-answer').innerText;
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.rate = 0.9; // Professional pace
-        window.speechSynthesis.speak(utterance);
+    
+    function speak() {
+        const text = document.getElementById('model-text').innerText;
+        const u = new SpeechSynthesisUtterance(text);
+        u.rate = 0.9;
+        window.speechSynthesis.speak(u);
     }
+    loadTopic();
 </script>
 
 </body>
