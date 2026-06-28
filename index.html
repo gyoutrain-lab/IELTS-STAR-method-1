@@ -2,57 +2,65 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Professional Proficiency Drill: Global Consultant</title>
+    <title>Band 9 Professional Drill</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; }
-        .app-container { max-width: 700px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .controls { display: flex; gap: 10px; margin-top: 15px; }
-        .layer-box { background: #eef2f7; padding: 15px; border-left: 5px solid #2c3e50; margin: 10px 0; }
-        button { background: #2c3e50; color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; }
-        #status { font-weight: bold; color: #34495e; margin-top: 10px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 20px; display: flex; justify-content: center; }
+        .drill-box { background: white; width: 100%; max-width: 600px; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        #timer { font-size: 2em; color: #c0392b; font-weight: bold; text-align: center; }
+        .script-area { background: #f8f9fa; padding: 20px; border-left: 5px solid #2c3e50; margin: 20px 0; min-height: 100px; }
+        .controls { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+        button { padding: 15px 25px; cursor: pointer; border: none; border-radius: 5px; font-weight: bold; }
+        .rec-btn { background: #27ae60; color: white; }
+        .stop-btn { background: #c0392b; color: white; }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-    <h2 id="topic-title">Drill: Sponsorship Expectation</h2>
+<div class="drill-box">
+    <h2 id="topic">Drill: Sponsorship Expectation</h2>
+    <div id="timer">02:00</div>
     
-    <div class="layer-box">
-        <p id="layer-prompt"><strong>Layer 1 (Direct Answer):</strong> State your strategic objective clearly. Listen to the model, then record your attempt.</p>
-        <button onclick="playModel()">Listen to Model</button>
-        <button onclick="toggleRecord()">Start/Stop Recording</button>
+    <div class="script-area" id="script-display">
+        "When I evaluate the prospect of sponsorship, I view it through the lens of a strategic alliance rather than a simple employment opportunity..."
     </div>
-
-    <div id="status">Status: Ready to drill</div>
 
     <div class="controls">
-        <button onclick="prevTopic()">Previous</button>
-        <button onclick="nextTopic()">Next Layer/Topic</button>
+        <button class="rec-btn" onclick="startDrill()">Start Drill & Record</button>
+        <button class="stop-btn" onclick="stopDrill()">Stop & Save</button>
     </div>
+    
+    <audio id="playback" controls style="width: 100%; margin-top: 20px;"></audio>
 </div>
 
 <script>
-    const drills = [
-        { title: "Sponsorship Expectation", text: "When I evaluate the prospect of sponsorship, I view it through the lens of a strategic alliance rather than a simple employment opportunity." },
-        { title: "The Triple-Win Framework", text: "My professional trajectory represents a mutually beneficial exchange between my career, the Australian sector, and Indonesia." }
-    ];
-    let current = 0;
+    let mediaRecorder;
+    let audioChunks = [];
+    let timeLeft = 120;
 
-    function playModel() {
-        const u = new SpeechSynthesisUtterance(drills[current].text);
-        window.speechSynthesis.speak(u);
-        document.getElementById('status').innerText = "Status: Playing model answer...";
+    function startDrill() {
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+            mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks);
+                document.getElementById('playback').src = URL.createObjectURL(audioBlob);
+            };
+            mediaRecorder.start();
+            startTimer();
+        });
     }
 
-    function toggleRecord() {
-        document.getElementById('status').innerText = "Status: Recording your attempt (simulate with your voice)...";
-        // Note: In a production environment, this integrates with the Web MediaRecorder API.
+    function startTimer() {
+        const interval = setInterval(() => {
+            timeLeft--;
+            document.getElementById('timer').innerText = `00:${timeLeft < 10 ? '0'+timeLeft : timeLeft}`;
+            if(timeLeft <= 0) clearInterval(interval);
+        }, 1000);
     }
 
-    function nextTopic() {
-        current = (current + 1) % drills.length;
-        document.getElementById('topic-title').innerText = "Drill: " + drills[current].title;
-        document.getElementById('status').innerText = "Status: New topic loaded.";
+    function stopDrill() {
+        mediaRecorder.stop();
+        alert("Recording saved. Proceed to self-scoring.");
     }
 </script>
 </body>
